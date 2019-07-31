@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：命名空间，设置为数据层接口的全类名-->
+<mapper namespace="com.oaec.ssm.mapper.ShopMapper">
+    
+    <select id="queryByUserId" parameterType="int" resultType="map">
+        SELECT commodity.commodity_id,commodity.commodity_image3,commodity.commodity_name,commodity.commodity_info,commodity.commodity_price,shop.quantity FROM shop,commodity WHERE users_id = #{uid} AND shop.commodity_id = commodity.commodity_id
+    </select>
+
+    <select id="queryByUserIdAndCommodityId" resultType="map">
+        SELECT * FROM shop,commodity WHERE shop.commodity_id = commodity.commodity_id AND users_id = #{userId} AND commodity.commodity_id = #{commodityId}
+    </select>
+
+    <update id="editQuantity">
+        UPDATE shop SET quantity = #{quantity} WHERE users_id = #{userId} AND commodity_id = #{commodityId}
+    </update>
+
+    <insert id="doInsert" parameterType="map">
+        INSERT INTO SHOP (users_id, commodity_id, quantity) VALUES (#{userId},#{commodityId},#{quantity})
+    </insert>
+
+    <delete id="doDelete">
+        DELETE FROM shop WHERE users_id = #{userId} AND commodity_id = #{commodityId}
+    </delete>
+
+    <update id="updateQuantity" parameterType="map">
+        UPDATE SHOP SET  quantity = quantity + #{quantity} WHERE users_id = #{userId} AND commodity_id = #{commodityId}
+    </update>
+
+    <select id="queryTotal" resultType="map">
+        SELECT sum(quantity) quantity,sum(quantity*commodity.commodity_price) totalprice FROM commodity,shop where commodity.commodity_id = shop.commodity_id AND shop.users_id = #{userId} AND commodity.commodity_id IN
+        <foreach collection="commodityIds" item="commodityId" open="(" separator="," close=")">
+            #{commodityId}
+        </foreach>
+    </select>
+
+    <select id="queryCommodity4Checkout" resultType="map">
+        SELECT commodity.commodity_id,commodity.commodity_image3,commodity.commodity_name,shop.quantity,commodity.commodity_price FROM shop,commodity WHERE shop.commodity_id = commodity.commodity_id and users_id = #{userId} AND commodity.commodity_id IN
+        <foreach collection="commodityIds" item="commodityId" open="(" separator="," close=")">
+            #{commodityId}
+        </foreach>
+    </select>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：命名空间，设置为数据层接口的全类名-->
+<mapper namespace="com.oaec.ssm.mapper.OrderMapper">
+
+    <select id="queryByUserId" parameterType="int" resultType="map">
+        SELECT * FROM orders WHERE users_id = #{userId} ORDER BY orders_addtime DESC
+    </select>
+    
+    <select id="queryCommodityByOrderId" parameterType="int" resultType="map">
+        select ordersinfo.commodity_id,ordersinfo.commodity_image,ordersinfo.commodity_name,ordersinfo.commodity_nameinfo,ordersinfo.quantity,ordersinfo.commodity_price from orders,ordersinfo where orders.orders_id = ordersinfo.orders_id and orders.orders_id = #{orderId}
+    </select>
+<!--返回值-->
+    <select id="getTotalPrice" resultType="double" >
+        select sum(ordersinfo.quantity*ordersinfo.commodity_price) totalprice from orders,ordersinfo where orders.orders_id = ordersinfo.orders_id and orders.orders_id = #{orderid}
+    </select>
+    <!---->
+    <insert id="doInsert" keyProperty="orderId" useGeneratedKeys="true" >
+        insert into orders (users_id, address_id) values (#{userId},#{addressId})
+    </insert>
+
+    <insert id="doInsertDetail" parameterType="map">
+        insert into ordersinfo (orders_id, commodity_id, commodity_name, commodity_image, commodity_price, quantity,commodity_nameinfo) values (#{orders_id},#{commodity_id},#{commodity_name},#{commodity_image3},#{commodity_price},#{quantity},#{commodity_info})
+    </insert>
+
+</mapper>

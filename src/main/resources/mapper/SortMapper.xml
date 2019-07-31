@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：命名空间，设置为数据层接口的全类名-->
+<mapper namespace="com.oaec.ssm.mapper.SortMapper">
+
+    <select id="queryNav" resultType="map">
+        SELECT * FROM sort WHERE sort_id IN (SELECT sort_id FROM COMMODITY GROUP BY sort_id)
+    </select>
+
+    <select id="queryBySid" parameterType="int" resultType="map">
+        SELECT * FROM sort WHERE sort_id = #{sid}
+    </select>
+</mapper>

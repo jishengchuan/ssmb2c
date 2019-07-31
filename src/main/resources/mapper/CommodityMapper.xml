@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：命名空间，设置为数据层接口的全类名-->
+<mapper namespace="com.oaec.ssm.mapper.CommodityMapper">
+    <!--
+        id:通常设置为数据层的方法名
+        parameterType:参数类型
+        resultType:查询结果中单条的数据类型
+        useGeneratedKeys:设置为true，代表需要使用自动生成的主键
+        keyProperty:将生成的主键保存在入参的那个属性中
+    -->
+    <select id="queryAll" resultType="map">
+        SELECT * FROM commodity
+    </select>
+
+    <select id="query" parameterType="map" resultType="map">
+        SELECT * FROM commodity WHERE commodity_states = 1
+    <if test="sid != null">
+        AND sort_id = #{sid}
+    </if>
+    <if test="bid != null">
+        AND brand_id = #{bid}
+    </if>
+    <if test="name != null">
+        AND commodity_name LIKE CONCAT('%',#{name},'%')
+    </if>
+    <if test="desc == 1">
+        ORDER BY COMMODITY_PRICE DESC
+    </if>
+    <if test="desc == 0">
+        ORDER BY COMMODITY_PRICE
+    </if>
+    </select>
+
+
+    <select id="queryBySaleOrStock" resultType="map">
+        SELECT * FROM commodity WHERE commodity_states = 1
+    <if test="cid != null">
+        AND commodity_id = #{cid}
+    </if>
+    <if test="sale != null">
+        ORDER BY sale DESC
+    </if>
+    <if test="stock != null">
+        ORDER BY stock DESC
+    </if>
+    </select>
+    
+    <update id="updateStockAndSale">
+        UPDATE commodity SET stock = stock - #{quantity},sale = sale + #{quantity} WHERE commodity_id = #{cid}
+    </update>
+    
+</mapper>

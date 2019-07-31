@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：命名空间，设置为数据层接口的全类名-->
+<mapper namespace="com.oaec.ssm.mapper.UserMapper">
+    
+    <select id="query" resultType="map">
+        SELECT * FROM users WHERE USERS_STATES = 1
+        <if test="username != null">
+            AND users_name = #{username}
+        </if>
+        <if test="password != null">
+            AND password = #{password}
+        </if>
+        <if test="tel != null">
+            AND users_tel = #{tel}
+        </if>
+    </select>
+
+    <insert id="doInsert">
+        INSERT INTO users(users_name, password, users_tel) values (#{username},#{password},#{tel})
+    </insert>
+
+    <update id="editPassword">
+        UPDATE users SET password = #{password} WHERE users_id = #{userId}
+    </update>
+
+    <update id="modityPhoto">
+        UPDATE users SET photo = #{path} WHERE users_id = #{userId}
+    </update>
+</mapper>

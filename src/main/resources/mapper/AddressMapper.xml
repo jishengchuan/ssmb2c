@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：命名空间，设置为数据层接口的全类名-->
+<mapper namespace="com.oaec.ssm.mapper.AddressMapper">
+
+    <select id="query" resultType="map">
+        SELECT * FROM address WHERE 1 = 1
+    <if test="userId != null">
+        AND users_id = #{userId} AND address_states = 1
+    </if>
+    <if test="addressId != null">
+        AND address_id = #{addressId}
+    </if>
+    </select>
+    
+    <insert id="doInsert" parameterType="map">
+        INSERT INTO address (addressee, tel, address, users_id, defaults) VALUES(#{addressee},#{tel},#{address},#{users_id},0)
+    </insert>
+
+    <update id="doUpdate" parameterType="map">
+        UPDATE address SET addressee = #{addressee},tel = #{tel},address = #{address} WHERE address_id = #{address_id}
+    </update>
+
+    <update id="doDelete" parameterType="map">
+        UPDATE  address SET address_states = 0 WHERE address_id = #{address_id}
+    </update>
+
+</mapper>
